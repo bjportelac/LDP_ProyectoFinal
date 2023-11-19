@@ -1,6 +1,6 @@
-package main
-import ("fmt")
+Graphica
 
-func main() {
-  fmt.Println("Hello World!")
+begin.graph(500,500){
+    draw.circle(10,10,10);
+    draw.square(20,20,50);
 }
