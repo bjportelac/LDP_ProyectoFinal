@@ -2,29 +2,30 @@ import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.Scanner;
 
 class Main {
     public static void main(String[] args) throws Exception{
         try {
-            GoControl goControl = new GoControl();
 
-            GoLexer goLexer = new GoLexer(CharStreams.fromFileName("input/input.txt"));
-            CommonTokenStream tokenStream = new CommonTokenStream(goLexer);
+            GraphicaLexer graphicaLexer = new GraphicaLexer(CharStreams.fromFileName("input/input.txt"));
+            CommonTokenStream tokenStream = new CommonTokenStream(graphicaLexer);
 
-            GoParser goParser = new GoParser(tokenStream);
-            ParseTree goTree = goParser.sourceFile();
+            GraphicaParser graphicaParser = new GraphicaParser(tokenStream);
+            ParseTree graphicaTree = graphicaParser.sourceFile();
 
-            Translator<Object> loader = new Translator<>();
-            loader.visit(goTree);
+            GraphicaInterpreter<Void> interpreter = new GraphicaInterpreter<>();
+            interpreter.visit(graphicaTree);
 
-            List<String> translation = Translator.translatedCode;
+            StringBuilder objectiveCode = new StringBuilder();
+            List<String>  graphicaCode = interpreter.getGraphicaCode();
+            if(graphicaCode != null && !graphicaCode.isEmpty()){
+                for(String s : graphicaCode){
+                    objectiveCode.append(s).append("\n");
+                }
+            }
 
-            String objectiveCode = goControl.IndentationController(translation);
-            System.out.println(objectiveCode);
+            System.out.println(objectiveCode.toString());
 
         } catch (Exception e){
             System.err.println("Error during translation: " + e.getCause());

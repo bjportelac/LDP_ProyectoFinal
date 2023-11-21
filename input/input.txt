@@ -1,6 +1,5 @@
-package main
-import ("fmt")
+from Graphica import {Basic,Objects}
 
-func main() {
-  fmt.Println("Hello World!")
+begin.graph(500,500){
+
 }
