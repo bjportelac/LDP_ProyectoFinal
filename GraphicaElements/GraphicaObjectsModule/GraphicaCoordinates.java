@@ -1,3 +1,5 @@
+package GraphicaObjectsModule;
+
 public class GraphicaCoordinates {
     final static String TAG = "Coordinates";
 

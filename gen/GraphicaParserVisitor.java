@@ -46,12 +46,6 @@ public interface GraphicaParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitCanvas(GraphicaParser.CanvasContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link GraphicaParser#coordinate}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitCoordinate(GraphicaParser.CoordinateContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link GraphicaParser#point}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -111,4 +105,64 @@ public interface GraphicaParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitDrawPolyline(GraphicaParser.DrawPolylineContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link GraphicaParser#coordinate}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCoordinate(GraphicaParser.CoordinateContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link GraphicaParser#objectsLibElem}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitObjectsLibElem(GraphicaParser.ObjectsLibElemContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link GraphicaParser#rgbColor}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRgbColor(GraphicaParser.RgbColorContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link GraphicaParser#fill}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFill(GraphicaParser.FillContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link GraphicaParser#stroke}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitStroke(GraphicaParser.StrokeContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link GraphicaParser#istyle}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIstyle(GraphicaParser.IstyleContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link GraphicaParser#shape}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitShape(GraphicaParser.ShapeContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link GraphicaParser#circle}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCircle(GraphicaParser.CircleContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link GraphicaParser#objsectsLibFunctions}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitObjsectsLibFunctions(GraphicaParser.ObjsectsLibFunctionsContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link GraphicaParser#dotDraw}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDotDraw(GraphicaParser.DotDrawContext ctx);
 }

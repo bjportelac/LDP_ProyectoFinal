@@ -1,3 +1,11 @@
+import GraphicaObjectsModule.GraphicaCoordinates;
+import GraphicaObjectsModule.Shapes.Circle;
+import GraphicaObjectsModule.Shapes.Shape;
+import GraphicaObjectsModule.Style.Fill;
+import GraphicaObjectsModule.Style.IStyle;
+import GraphicaObjectsModule.Style.RGB;
+import GraphicaObjectsModule.Style.Stroke;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,7 +18,12 @@ public class GraphicaInterpreter<Void>  extends  GraphicaParserBaseVisitor<Void>
 
     //Graphica Objects Handle
     HashMap<String, GraphicaCoordinates> coordinatesHashMap = new HashMap<>();
-
+    HashMap<String, RGB> colorsHashMap = new HashMap<>();
+    HashMap<String, Fill> fillHashMap = new HashMap<>();
+    HashMap<String, Stroke> strokeHashMap = new HashMap<>();
+    HashMap<String, IStyle> iStyleHashMap = new HashMap<>();
+    HashMap<String, Shape> shapeHashMap = new HashMap<>();
+    //shapeHashMap.forEach((key, value) -> System.out.println("Key: " + key + ", Value: " + value));
 
     //SourceFile
     @Override
@@ -20,8 +33,6 @@ public class GraphicaInterpreter<Void>  extends  GraphicaParserBaseVisitor<Void>
                 for(int i = 0; i < ctx.importStatements().size(); i++){
                     visitImportStatements(ctx.importStatements(i));
                 }
-            }else{
-                //Raise Error: 'Basic' library is required.
             }
 
             if(ctx.coordinate() != null){
@@ -32,8 +43,6 @@ public class GraphicaInterpreter<Void>  extends  GraphicaParserBaseVisitor<Void>
 
             if(ctx.initialize() != null){
                 visitInitialize(ctx.initialize());
-            }else{
-                //Raise Error: initialization is required
             }
         }
         return null;
@@ -45,8 +54,6 @@ public class GraphicaInterpreter<Void>  extends  GraphicaParserBaseVisitor<Void>
         if(ctx != null){
             if(ctx.Graphica() != null && ctx.libraries() != null){
                 visitLibraries(ctx.libraries());
-            }else{
-                //Raise Error: libraries may not be properly declared
             }
         }
         return null;
@@ -71,8 +78,6 @@ public class GraphicaInterpreter<Void>  extends  GraphicaParserBaseVisitor<Void>
                 graphicaLibraries.setBasic(Boolean.TRUE);
             } else if (ctx.Objects() != null) {
                 graphicaLibraries.setObjects(Boolean.TRUE);
-            } else{
-                //Raise Error: Library does not belong to this package
             }
         }
         return null;
@@ -93,8 +98,6 @@ public class GraphicaInterpreter<Void>  extends  GraphicaParserBaseVisitor<Void>
                 graphicaCode.add("</svg>");
                 graphicaCode.add("</body>");
                 graphicaCode.add("</html>");
-            }else{
-                //Raise Error: Graphical area may not be declared
             }
         }
         return null;
@@ -121,6 +124,11 @@ public class GraphicaInterpreter<Void>  extends  GraphicaParserBaseVisitor<Void>
             if(ctx.sentence() != null){
                 for(int i = 0; i<ctx.sentence().size() ;i++){
                     visitSentence(ctx.sentence(i));
+                }
+            }
+            if(ctx.objectsLibElem() != null){
+                for(int i = 0; i<ctx.objectsLibElem().size() ;i++){
+                    visitObjectsLibElem(ctx.objectsLibElem(i));
                 }
             }
         }
@@ -180,7 +188,7 @@ public class GraphicaInterpreter<Void>  extends  GraphicaParserBaseVisitor<Void>
             if(ctx.ID() != null && ctx.Integer().size() == 1 && graphicaLibraries.getObjects()){
                 if(!ctx.ID().getText().isEmpty()){
                     String id = ctx.ID().getText();
-                    GraphicaCoordinates coordinates = null;
+                    GraphicaCoordinates coordinates;
                     if(coordinatesHashMap.get(id) != null){
                         coordinates = coordinatesHashMap.get(id);
                         doCircle = "<circle cx=\"" + coordinates.getX() + "\" cy=\"" + coordinates.getY() + "\" r=\"" + ctx.Integer(0) + "\"/>";
@@ -208,7 +216,7 @@ public class GraphicaInterpreter<Void>  extends  GraphicaParserBaseVisitor<Void>
             if(ctx.ID() != null && ctx.Integer().size() == 1 && graphicaLibraries.getObjects()){
                 if(!ctx.ID().getText().isEmpty()){
                     String id = ctx.ID().getText();
-                    GraphicaCoordinates coordinates = null;
+                    GraphicaCoordinates coordinates;
                     if(coordinatesHashMap.get(id) != null){
                         coordinates = coordinatesHashMap.get(id);
                         doSquare = "<rect x=\"" + coordinates.getX()+ "\" y=\"" + coordinates.getY() + "\" width=\"" + ctx.Integer(0) +"\" height=\"" + ctx.Integer(0) + "\"/>";
@@ -236,7 +244,7 @@ public class GraphicaInterpreter<Void>  extends  GraphicaParserBaseVisitor<Void>
             if(graphicaLibraries.getObjects()){
                 if(ctx.ID() != null && ctx.Integer().size() == 2){
                     String id = ctx.ID().getText();
-                    GraphicaCoordinates coordinates = null;
+                    GraphicaCoordinates coordinates;
                     if(coordinatesHashMap.get(id) != null){
                         coordinates = coordinatesHashMap.get(id);
                         doEllipse = "<ellipse cx=\"" + coordinates.getX() + "\" cy=\"" + coordinates.getY() + "\" rx=\"" + ctx.Integer(0) + "\" ry=\"" + ctx.Integer(1) + "\"/>";
@@ -382,8 +390,6 @@ public class GraphicaInterpreter<Void>  extends  GraphicaParserBaseVisitor<Void>
     }
 
     //Polyline
-    /*//<polyline points="60, 110 65, 120 70, 115 75, 130 80, 125 85, 140 90, 135 95, 150 100, 145"/>
-drawPolyline: Polyline L_Paren (point (Comma point)+) R_Paren Semicolon;*/
     @Override
     public Void visitDrawPolyline(GraphicaParser.DrawPolylineContext ctx) {
         if(ctx != null){
@@ -399,6 +405,8 @@ drawPolyline: Polyline L_Paren (point (Comma point)+) R_Paren Semicolon;*/
         }
         return null;
     }
+
+    //----------------------OBJECTS MODULE ELEMENTS---------------------------------
 
     //Visit Coordinates
     @Override
@@ -420,16 +428,10 @@ drawPolyline: Polyline L_Paren (point (Comma point)+) R_Paren Semicolon;*/
                         Integer y = Integer.valueOf(ctx.Integer(1).getText());
                         coordinates = new GraphicaCoordinates(x,y);
                     }
-                } else {
-                    //RaiseError: Too many parameters
                 }
 
                 if(!identifier.isEmpty() && coordinates != null){
-                    if(coordinatesHashMap.get(identifier) == null){
-                        coordinatesHashMap.put(identifier,coordinates);
-                    }else{
-                        //RaiseError: Object already declared
-                    }
+                    coordinatesHashMap.putIfAbsent(identifier, coordinates);
 
                 }
             }
@@ -437,6 +439,259 @@ drawPolyline: Polyline L_Paren (point (Comma point)+) R_Paren Semicolon;*/
         return null;
     }
 
+    @Override
+    public Void visitObjectsLibElem(GraphicaParser.ObjectsLibElemContext ctx) {
+        if(ctx != null && graphicaLibraries.getObjects()){
+            if(ctx.rgbColor() != null){
+                visitRgbColor(ctx.rgbColor());
+            }
+            if(ctx.fill() != null){
+                visitFill(ctx.fill());
+            }
+            if(ctx.stroke() != null){
+                visitStroke(ctx.stroke());
+            }
+            if(ctx.istyle() != null){
+                visitIstyle(ctx.istyle());
+            }
+            if(ctx.shape() != null){
+                visitShape(ctx.shape());
+            }
+            if(ctx.objsectsLibFunctions() != null){
+                visitObjsectsLibFunctions(ctx.objsectsLibFunctions());
+            }
+        }
+        return null;
+    }
+
+    //RGB colors
+    @Override
+    public Void visitRgbColor(GraphicaParser.RgbColorContext ctx) {
+        if(ctx != null){;
+            if(ctx.ID() != null && ctx.Integer() != null){
+                String identifier = ctx.ID().getText();
+                RGB rgb = null;
+
+                if(ctx.Integer().isEmpty()){
+                    rgb = new RGB();
+                }
+                if(ctx.Integer().size() == 3){
+                    rgb = new RGB(Integer.valueOf(ctx.Integer(0).getText()),Integer.valueOf(ctx.Integer(1).getText()),Integer.valueOf(ctx.Integer(2).getText()));
+                }
+
+                if(!identifier.isEmpty() && rgb != null){
+                    colorsHashMap.putIfAbsent(identifier, rgb);
+                }
+            }
+        }
+        return null;
+    }
+
+    //Fill
+    @Override
+    public Void visitFill(GraphicaParser.FillContext ctx) {
+        if(ctx != null){
+            Fill fill = null;
+            String identifier = null;
+            if(ctx.ID() != null){
+
+                RGB rgb = null;
+                Double opacity = null;
+
+                identifier = ctx.ID(0).getText();
+                if(ctx.ID().size() == 1 && ctx.ID(0) != null && ctx.Integer().size() == 3 && ctx.Double() != null){
+                    rgb = new RGB(Integer.valueOf(ctx.Integer(0).getText()),Integer.valueOf(ctx.Integer(1).getText()),Integer.valueOf(ctx.Integer(2).getText()));
+                    opacity = Double.parseDouble(ctx.Double().getText());
+                    fill = new Fill(rgb,opacity);
+                }
+                if(ctx.ID().size() == 2 && ctx.ID(0) != null && ctx.Double() != null){
+                    rgb = colorsHashMap.get(ctx.ID(1).getText());
+                    if(rgb != null){
+                        opacity = Double.parseDouble(ctx.Double().getText());
+                        fill = new Fill(rgb,opacity);
+                    }
+                }
+                if(ctx.Integer().isEmpty() && ctx.Double() == null){
+                    fill = new Fill();
+                }
+
+                if(!identifier.isEmpty() && fill != null){
+                    fillHashMap.putIfAbsent(identifier, fill);
+                }
+
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitStroke(GraphicaParser.StrokeContext ctx) {
+        if(ctx != null){
+            if(ctx.ID() != null){
+                Stroke stroke = null;
+                String identifier,linecap = null;
+                RGB rgb = null;
+                Double width = null, opacity = null;
+                identifier = ctx.ID(0).getText();
+                if(ctx.Integer() != null && ctx.Integer().size() == 3){
+                    rgb = new RGB(Integer.valueOf(ctx.Integer(0).getText()),Integer.valueOf(ctx.Integer(1).getText()),Integer.valueOf(ctx.Integer(2).getText()));
+                }
+                if(ctx.ID(1) != null){
+                    rgb = colorsHashMap.get(ctx.ID(1).getText());
+                }
+                if(ctx.Double() != null && ctx.Double().size() == 2){
+                    opacity = Double.parseDouble(ctx.Double(0).getText());
+                    width = Double.parseDouble(ctx.Double(1).getText());
+                }
+                if(ctx.FillType() != null){
+                    linecap = ctx.FillType().getText();
+                }
+                if(rgb != null && identifier != null && linecap != null && width != null && opacity != null){
+                    stroke = new Stroke(rgb,opacity,width,linecap);
+                }else{
+                    stroke = new Stroke();
+                }
+                strokeHashMap.putIfAbsent(identifier,stroke);
+            }
+        }
+        return null;
+    }
+
+    //IStyle
+    @Override
+    public Void visitIstyle(GraphicaParser.IstyleContext ctx) {
+        if(ctx != null){
+            if(ctx.ID() != null &&ctx.Double() != null){
+                String identifier = null;
+                Fill fill = null;
+                Stroke stroke = null;
+                IStyle iStyle = null;
+                Double opacity = null;
+
+                if(ctx.ID(0) != null){
+                    identifier = ctx.ID(0).getText();
+                }
+                if(ctx.ID(1) != null && ctx.ID(2) != null){
+                    if(fillHashMap.get(ctx.ID(1).getText()) != null){
+                        fill = fillHashMap.get(ctx.ID(1).getText());
+                    }
+                    if(strokeHashMap.get(ctx.ID(2).getText()) != null){
+                        stroke = strokeHashMap.get(ctx.ID(2).getText());
+                    }
+                }
+                opacity = Double.parseDouble(ctx.Double().getText());
+
+                if(identifier != null && stroke != null && fill != null){
+                    iStyle = new IStyle(fill,stroke,opacity);
+                }
+
+                iStyleHashMap.putIfAbsent(identifier,iStyle);
+            }
+        }
+        return null;
+    }
+
+    //Shapes
+    @Override
+    public Void visitShape(GraphicaParser.ShapeContext ctx) {
+        if(ctx != null){
+            if(ctx.circle() != null){
+                visitCircle(ctx.circle());
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitCircle(GraphicaParser.CircleContext ctx) {
+        if(ctx != null){
+            if(ctx.Integer() != null && ctx.Integer().size() == 3 && ctx.ID() != null && ctx.ID().size() == 2){
+                Circle circle = null;
+                String identifier = null;
+                IStyle iStyle = null;
+
+                identifier = ctx.ID(0).getText();
+                if(identifier != null){
+                    iStyle = iStyleHashMap.get(ctx.ID(1).getText());
+                    if(iStyle != null){
+                        circle = new Circle(Integer.valueOf(ctx.Integer(0).getText()),Integer.valueOf(ctx.Integer(1).getText()),Integer.valueOf(ctx.Integer(2).getText()));
+                        circle.setStyle(iStyle);
+                    }
+                }
+
+                shapeHashMap.putIfAbsent(identifier,circle);
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitObjsectsLibFunctions(GraphicaParser.ObjsectsLibFunctionsContext ctx) {
+        if(ctx != null){
+            if(ctx.dotDraw() != null){
+                visitDotDraw(ctx.dotDraw());
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitDotDraw(GraphicaParser.DotDrawContext ctx) {
+        if(ctx != null){
+            Shape shape = null;
+            StringBuilder sb = new StringBuilder();
+            if(ctx.ID() != null){
+                if(shapeHashMap.get(ctx.ID().toString()) != null){
+                    shape = shapeHashMap.get(ctx.ID().toString());
+                    if(shape instanceof Circle){
+                        Circle c = (Circle) shape;
+                        if(c.getCx() != null && c.getCy() != null && c.getR() != null)
+                            // doCircle = "<circle cx=\"" + ctx.Integer(0) + "\" cy=\"" + ctx.Integer(1) + "\" r=\"" + ctx.Integer(2) + "\"/>";
+                            sb.append("<circle cx=\"")
+                                    .append(c.getCx())
+                                    .append("\" cy=\"")
+                                    .append(c.getCy())
+                                    .append("\" r=\"")
+                                    .append(c.getR());
+                        if(c.getStyle() != null){
+                            if(c.getStyle().getFill() != null){
+                                Fill f = c.getStyle().getFill();
+                                if(f.getFillColor() != null){
+                                    RGB rgb  = f.getFillColor();
+                                    sb.append("\" fill=\"").append("rgb(").append(rgb.getRed()).append(",").append(rgb.getGreen()).append(",").append(rgb.getBlue()).append(")\"");
+                                }
+                                if(f.getOpacity() != null){
+                                    sb.append(" fill-opacity=\"").append(f.getOpacity()).append("\"");
+                                }
+                            }
+                            if(c.getStyle().getStroke() != null){
+                                Stroke s = c.getStyle().getStroke();
+                                if(s.getStrokeColor() != null){
+                                    RGB rgb = s.getStrokeColor();
+                                    sb.append(" stroke=\"rgb(").append(rgb.getRed()).append(",").append(rgb.getGreen()).append(",").append(rgb.getBlue()).append(")\"");
+                                }
+                                if(s.getStrokeOpacity() != null){
+                                    sb.append(" stroke-opacity=\"").append(s.getStrokeOpacity()).append("\"");
+                                }
+                                if(s.getStrokeWidth() != null){
+                                    sb.append(" stroke-width=\"").append(s.getStrokeWidth()).append("\"");
+                                }
+                                if(s.getLinecap() != null){
+                                    sb.append(" stroke-linecap=\"").append(s.getLinecap()).append("\"");
+                                }
+                            }
+                            sb.append("/>");
+                        }else{
+                            sb.append("/>");
+                        }
+
+                        graphicaCode.add(sb.toString());
+                    }
+                }
+            }
+        }
+        return null;
+    }
 
     public List<String> getGraphicaCode() {
         return graphicaCode;
