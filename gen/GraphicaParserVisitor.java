@@ -154,6 +154,42 @@ public interface GraphicaParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitCircle(GraphicaParser.CircleContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link GraphicaParser#square}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSquare(GraphicaParser.SquareContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link GraphicaParser#rect}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRect(GraphicaParser.RectContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link GraphicaParser#ellipse}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitEllipse(GraphicaParser.EllipseContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link GraphicaParser#line}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLine(GraphicaParser.LineContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link GraphicaParser#polyline}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPolyline(GraphicaParser.PolylineContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link GraphicaParser#polygon}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPolygon(GraphicaParser.PolygonContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link GraphicaParser#objsectsLibFunctions}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

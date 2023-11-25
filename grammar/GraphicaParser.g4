@@ -65,10 +65,15 @@ fill: Fill ID Assign New Fill L_Paren ( ( ( (L_Paren(Integer (Comma Integer)+) R
 stroke: Stroke ID Assign New Stroke L_Paren ( ( ( (L_Paren(Integer (Comma Integer)+) R_Paren) | ID) Comma Double Comma Double Comma (Quote FillType Quote) )? )R_Paren Semicolon;
 istyle: IStyle ID Assign New IStyle L_Paren (ID Comma ID Comma Double) R_Paren Semicolon;
 
-shape : circle ;
+shape : circle | square | rect | ellipse | line | polyline | polygon ;
 
 circle : Obj_Circle ID Assign New Obj_Circle  L_Paren( Integer (Comma Integer)* Comma ID )R_Paren Semicolon;
-
+square : Obj_Square ID Assign New Obj_Square  L_Paren( Integer (Comma Integer)* Comma ID )R_Paren Semicolon;
+rect : Obj_Rect ID Assign New Obj_Rect L_Paren( Integer (Comma Integer)* Comma ID )R_Paren Semicolon;
+ellipse: Obj_Ellipse ID Assign New Obj_Ellipse L_Paren( Integer (Comma Integer)* Comma ID )R_Paren Semicolon;
+line: Obj_Line ID Assign New Obj_Line L_Paren( point (Comma point)* Comma ID )R_Paren Semicolon;
+polyline: Obj_Polyline ID Assign New Obj_Polyline L_Paren( point (Comma point)* Comma ID )R_Paren Semicolon;
+polygon: Obj_Polygon ID Assign New Obj_Polygon L_Paren( point (Comma point)* Comma ID )R_Paren Semicolon;
 
 //ObjsectsLibFunctions
 objsectsLibFunctions : dotDraw;

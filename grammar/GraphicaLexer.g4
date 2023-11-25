@@ -17,6 +17,12 @@ Graph               : 'graph';
 //Objects lib
 Coordinates         : 'Coordinate';
 Obj_Circle          : 'Circle';
+Obj_Square          : 'Square';
+Obj_Rect            : 'Rect';
+Obj_Ellipse         : 'Ellipse';
+Obj_Line            : 'Line';
+Obj_Polyline        : 'Polyline';
+Obj_Polygon         : 'Polygon';
 
 Fill                : 'Fill';
 RGB                 : 'RGB';
