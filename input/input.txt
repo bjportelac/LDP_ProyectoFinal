@@ -1,5 +1,33 @@
 from Graphica import {Basic,Objects}
 
 begin.graph(500,500){
+    RGB red = new RGB(255,0,0);
+    RGB black = new RGB();
 
+    Fill f1 = new Fill(red,0.5);
+    Fill f2 = new Fill((120,120,120),0.5);
+    Fill f3 = new Fill();
+
+    Stroke s1 = new Stroke();
+    Stroke s2 = new Stroke(black,0.5,0.5,"butt");
+    Stroke s3 = new Stroke((0,255,0),0.75,5.0,"round");
+
+    IStyle is1 = new IStyle(f1,s2,1.0);
+
+    Circle c1 = new Circle(10,10,50,is1);
+    Square s1 = new Square(50,50,25,is1);
+    Rect r1 = new Rect(70,40,60,50,is1);
+    Ellipse e1 = new Ellipse(100,120,75,25,is1);
+    Line l1 = new Line((70,70),(30,30),s3);
+    Polyline py1 = new Polyline((100,100),(50,125),(50,50),(100,100),is1);
+    Polygon pg1 = new Polygon((100,10),(40,198),(190,78),(10,78),(160,198),is1);
+
+
+    c1.draw;
+    s1.draw;
+    r1.draw;
+    e1.draw;
+    l1.draw;
+    py1.draw;
+    pg1.draw;
 }

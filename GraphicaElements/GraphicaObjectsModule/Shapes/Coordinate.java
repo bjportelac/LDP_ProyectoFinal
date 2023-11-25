@@ -1,19 +1,21 @@
-public class GraphicaCoordinates {
+package GraphicaObjectsModule.Shapes;
+
+public class Coordinate {
     final static String TAG = "Coordinates";
 
     private Integer x;
     private Integer y;
 
-    public GraphicaCoordinates() {
+    public Coordinate() {
         this.x = 0;
         this.y = 0;
     }
-    public GraphicaCoordinates(Integer value) {
+    public Coordinate(Integer value) {
         this.x = value;
         this.y = value;
     }
 
-    public GraphicaCoordinates(Integer x, Integer y) {
+    public Coordinate(Integer x, Integer y) {
         this.x = x;
         this.y = y;
     }
